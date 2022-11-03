@@ -19,13 +19,15 @@ public class Shop {
     private Integer shopId;
 
     @NotNull
-    @Column(unique = true)
+    @Column(name = "branch", unique = true)
     private String branch;
 
     @NotNull
+    @Column(name = "location")
     private String location;
 
     @NotNull
+    @Column(name = "phone")
     private String phone;
 
     @ManyToOne

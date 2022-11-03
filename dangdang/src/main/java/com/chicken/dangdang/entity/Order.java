@@ -30,14 +30,18 @@ public class Order {
     private User userId;
 
     @NotNull
+    @Column(name = "fried")
     private Integer fried;
 
     @NotNull
+    @Column(name = "seasoned")
     private Integer seasoned;
 
     @NotNull
+    @Column(name = "extra")
     private String extra;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "accepted")
     private Accepted accepted;
 }

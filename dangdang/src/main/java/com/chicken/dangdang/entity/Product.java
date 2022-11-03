@@ -20,8 +20,10 @@ public class Product {
     private Shop shopId;
 
     @NotNull
+    @Column(name = "fried_qty")
     private Integer friedQty;
 
     @NotNull
+    @Column(name = "seasoned_qty")
     private Integer seasonedQty;
 }
