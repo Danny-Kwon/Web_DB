@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+  <div th:fragment="header">
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+      <button class="navbar-toggler" type="button" data-toggle="collapse"
+              data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="/">Dangdang</a>
+
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')"> <!--ACCESS SELLER인 경우 노출-->
+            <a class="nav-link" href="/seller/shop">매장 관리</a>
+          </li>
+          <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')"> <!--ACCESS SELLER인 경우 노출-->
+            <a class="nav-link" href="/seller/order">주문 내역</a>
+          </li>
+          <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')"> <!--ACCESS SELLER인 경우 노출-->
+            <a class="nav-link" href="/seller/product">상품 관리</a>
+          </li>
+          <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_CLIENT')"> <!--ACCESS CLIENT인 경우 노출-->
+            <a class="nav-link" href="/user/order">주문 내역</a>
+          </li>
+          <li class="nav-item" sec:authorize="isAnonymous()"> <!--비인증 회원-->
+            <a class="nav-link" href="/user/login">고객 로그인</a>
+          <li class="nav-item" sec:authorize="isAnonymous()"> <!--비인증 회원-->
+            <a class="nav-link" href="/seller/login">판매자 로그인</a>
+          </li>
+          <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_CLIENT')"> <!--고객 로그아웃-->
+            <a class="nav-link" href="/user/logout">로그아웃</a>
+          </li>
+          <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')"> <!--판매자 로그아웃-->
+            <a class="nav-link" href="/seller/logout">로그아웃</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</html>
