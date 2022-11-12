@@ -6,6 +6,7 @@ import com.chicken2.dangdang2.entity.Shop;
 import com.chicken2.dangdang2.entity.User;
 import com.chicken2.dangdang2.repository.OrderRepository;
 import com.chicken2.dangdang2.repository.ShopRepository;
+import com.chicken2.dangdang2.repository.UserRepository;
 import com.chicken2.dangdang2.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final OrderRepository orderRepository;
     private final ShopRepository shopRepository;
+    private final UserRepository userRepository;
 
     @GetMapping(value = "/new")
     public String newUser(Model model){
@@ -56,13 +58,13 @@ public class UserController {
 
     @GetMapping(value = "/login")
     public String loginUser(){
-        return "user/userLogin";
+        return "user/login";
     }
 
     @GetMapping(value = "/login/error")
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-        return "user/userLogin";
+        return "user/login";
     }
 
     @GetMapping(value = "/main") // 지점명 검색하면 해당 지점 shop 인스턴스 보여줌
@@ -73,8 +75,9 @@ public class UserController {
     }
 
     @GetMapping(value = "/orders") // user ID를 통해 볼 수 있는 주문목록
-    public String userOrder(@RequestParam(value = "user_id", required = false) UserDto userDto, Model model){
-        List<Order> orderList = orderRepository.findByUser(userDto);
+    public String userOrder(@RequestParam(value = "email", required = false) String email, Model model){
+        User user = userRepository.findByEmail(email);
+        List<Order> orderList = orderRepository.findByUser(user);
         model.addAttribute("orderList", orderList);
         return "user/orders";
     }

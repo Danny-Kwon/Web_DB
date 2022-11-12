@@ -31,7 +31,7 @@
     <form action="/user/new" role="form" method="post"  th:object="${userDto}">
         <div class="form-group">
             <label th:for="name">이름</label>
-            <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요">
+            <input type="text" th:field="*{name}" class="form-control" placeholder="사용자 이름을 입력해주세요">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
         </div>
         <div class="form-group">

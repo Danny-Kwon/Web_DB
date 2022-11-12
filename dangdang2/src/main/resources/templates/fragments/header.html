@@ -26,15 +26,17 @@
             <a class="nav-link" href="/user/order">주문 내역</a>
           </li>
           <li class="nav-item" sec:authorize="isAnonymous()"> <!--비인증 회원-->
-            <a class="nav-link" href="/user/login">고객 로그인</a>
+            <a class="nav-link" href="/user/login">로그인</a>
           <li class="nav-item" sec:authorize="isAnonymous()"> <!--비인증 회원-->
-            <a class="nav-link" href="/seller/login">판매자 로그인</a>
+            <a class="nav-link" href="/user/new">고객 가입</a>
+          <li class="nav-item" sec:authorize="isAnonymous()"> <!--비인증 회원-->
+            <a class="nav-link" href="/seller/new">판매자 가입</a>
           </li>
           <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_CLIENT')"> <!--고객 로그아웃-->
             <a class="nav-link" href="/user/logout">로그아웃</a>
           </li>
           <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')"> <!--판매자 로그아웃-->
-            <a class="nav-link" href="/seller/logout">로그아웃</a>
+            <a class="nav-link" href="/user/logout">로그아웃</a>
           </li>
         </ul>
       </div>

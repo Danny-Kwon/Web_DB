@@ -7,6 +7,7 @@ import com.chicken2.dangdang2.entity.Shop;
 import com.chicken2.dangdang2.entity.User;
 import com.chicken2.dangdang2.repository.OrderRepository;
 import com.chicken2.dangdang2.repository.ShopRepository;
+import com.chicken2.dangdang2.repository.UserRepository;
 import com.chicken2.dangdang2.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,18 +30,19 @@ public class SellerController {
     private final PasswordEncoder passwordEncoder;
     private final OrderRepository orderRepository;
     private final ShopRepository shopRepository;
+    private final UserRepository userRepository;
 
     @GetMapping(value = "/new")
     public String newSeller(Model model){
         model.addAttribute("userDto", new UserDto());
-        return "user/new";
+        return "seller/new";
     }
 
     @PostMapping(value = "/new")
     public String newSeller(@Valid UserDto userDto, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
-            return "user/new";
+            return "seller/new";
         }
 
         try {
@@ -48,33 +50,24 @@ public class SellerController {
             userService.saveUser(user);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
-            return "user/new";
+            return "seller/new";
         }
 
         return "main";
     }
 
-    @GetMapping(value = "/login")
-    public String loginSeller(){
-        return "user/userLogin";
-    }
-
-    @GetMapping(value = "/login/error")
-    public String loginSeller(Model model){
-        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
-        return "user/userLogin";
-    }
-
     @PostMapping(value = "/newShop")
-    public String newShop(@Valid ShopDto shopDto, @RequestParam(value = "user_id", required = false) UserDto userDto, Model model){
-        List<Shop> shopList = shopRepository.findByUser(userDto);
+    public String newShop(@Valid ShopDto shopDto, @RequestParam(value = "email", required = false) String email, Model model){
+        User user = userRepository.findByEmail(email);
+        List<Shop> shopList = shopRepository.findByUser(user);
         model.addAttribute("shopList", shopList);
         return "seller/shops";
     }
 
     @GetMapping(value = "/orders")
-    public String shopOrders(@RequestParam(value = "branch", required = false)ShopDto shopDto, Model model){
-        List<Order> orderList = orderRepository.findByShop(shopDto);
+    public String shopOrders(@RequestParam(value = "branch", required = false)String branch, Model model){
+        Shop shop = (Shop) shopRepository.findByBranch(branch);
+        List<Order> orderList = orderRepository.findByShop(shop);
         return "seller/orders";
     }
 }
