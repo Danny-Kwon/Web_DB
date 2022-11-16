@@ -1,6 +1,5 @@
 package com.chicken2.dangdang2.dto;
 
-import com.chicken2.dangdang2.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +17,6 @@ public class ShopDto {
 
     @NotEmpty(message = "전화번호는 필수 입력 값입니다.")
     String phone;
-    User user;
     Integer friedQty;
     Integer seasonedQty;
 }

@@ -37,9 +37,6 @@ class ShopRepositoryTest {
     @DisplayName("지점명 검색 테스트")
     public void findByBranch() {
         this.createShopList();
-        List<Shop> shopList = shopRepository.findByBranch("가천1호점");
-        for(Shop shop: shopList){
-            System.out.println(shop.toString());
-        }
+        Shop shopList = shopRepository.findByBranch("가천1호점");
     }
 }

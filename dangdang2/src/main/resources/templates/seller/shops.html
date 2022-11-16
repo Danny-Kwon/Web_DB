@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<div layout:fragment="content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+        <h2 class="mb-2">상품 관리</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="d-flex justify-content-center">
+          <div class="item">
+            <div class="car-wrap rounded ftco-animate">
+              <div class="img rounded d-flex align-items-end" style="background-image: url(/images/dangdang-1.jpg);">
+              </div>
+              <div class="text">
+                <h2 class="mb-0">후라이드 치킨</h2>
+                <div class="count-wrap _count">
+                  <button type="button" class="plus">+</button>
+                  <input type="text" class="inp" value="20" size="3" />
+                  <button type="button" class="minus">-</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="car-wrap rounded ftco-animate">
+              <div class="img rounded d-flex align-items-end" style="background-image: url(/images/dangdang-2.jpg);">
+              </div>
+              <div class="text">
+                <h2 class="mb-0">양념 치킨</h2>
+                <div class="count-wrap _count">
+                  <button type="button" class="plus">+</button>
+                  <input type="text" class="inp" value="20" size="3"/>
+                  <button type="button" class="minus">-</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="car-wrap rounded ftco-animate">
+            <button type="button" class="submit">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</html>

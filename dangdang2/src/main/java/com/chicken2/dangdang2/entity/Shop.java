@@ -14,6 +14,7 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Shop implements Serializable {
     @Id
     @Column(name = "shop_id")
@@ -44,15 +45,4 @@ public class Shop implements Serializable {
     @JoinColumn(name = "user_id")
     @NotNull
     private User user;
-
-    public static Shop createBranch(ShopDto shopDto, User user){
-        Shop shop = new Shop();
-        shop.setBranch(shop.getBranch());
-        shop.setLocation(shop.getPhone());
-        shop.setPhone(shop.getPhone());
-        shop.setUser(user);
-        shop.setFriedQty(shop.getFriedQty());
-        shop.setSeasonedQty(shop.getSeasonedQty());
-        return shop;
-    }
 }

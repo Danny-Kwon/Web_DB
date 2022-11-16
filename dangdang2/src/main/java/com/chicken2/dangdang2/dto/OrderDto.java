@@ -9,8 +9,6 @@ import lombok.Setter;
 @Setter
 public class OrderDto {
     Integer orderId;
-    User user;
-    Shop shop;
     Integer fried;
     Integer seasoned;
     String extra;

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+            .fieldError {
+                color: #bd2130;
+            }
+        </style>
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+  <script th:inline="javascript">
+            $(document).ready(function(){
+                var errorMessage = [[${errorMessage}]];
+                if(errorMessage != null){
+                    alert(errorMessage);
+                }
+            });
+        </script>
+
+</th:block>
+
+<div layout:fragment="content">
+
+  <form action="/user/order" role="form" method="post"  th:object="${orderDto}">
+    <div class="form-group">
+      <label th:for="fried">후라이드</label>
+      <input type="number" th:field="*{fried}" class="form-control" placeholder="후라이드 치킨 수량을 입력해주세요">
+    </div>
+    <div class="form-group">
+      <label th:for="seasoned">양념</label>
+      <input type="number" th:field="*{seasoned}" class="form-control" placeholder="양념 치킨 수량을 입력해주세요">
+    </div>
+    <div class="form-group">
+      <label th:for="extra">비밀번호</label>
+      <input type="text" th:field="*{extra}" class="form-control" placeholder="비밀번호 입력">
+    </div>
+    <div style="text-align: center">
+      <button type="submit" class="btn btn-primary" style="">주문</button>
+    </div>
+    <p th:if="${shop}" th:text="${shop}"></p>
+  </form>
+
+</div>
+
+</html>

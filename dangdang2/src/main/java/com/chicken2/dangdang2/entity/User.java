@@ -16,6 +16,7 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User implements Serializable {
     @Id
     @Column(name="user_id")

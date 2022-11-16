@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ShopRepository extends JpaRepository<Shop, String> {
-    List<Shop> findByBranch(String branch); // 지점명으로 검색
-    List<Shop> findByUser(User user);
+    Shop findByBranch(String branch); // 지점명으로 검색
+    Shop findByUser(User user);
 }

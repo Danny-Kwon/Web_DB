@@ -1,5 +1,7 @@
 package com.chicken2.dangdang2.controller;
 
+import com.chicken2.dangdang2.dto.OrderDto;
+import com.chicken2.dangdang2.dto.ShopDto;
 import com.chicken2.dangdang2.dto.UserDto;
 import com.chicken2.dangdang2.entity.Order;
 import com.chicken2.dangdang2.entity.Shop;
@@ -9,6 +11,7 @@ import com.chicken2.dangdang2.repository.ShopRepository;
 import com.chicken2.dangdang2.repository.UserRepository;
 import com.chicken2.dangdang2.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +19,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
-
+@Slf4j
 @RequestMapping("/user")
 @Controller
 @RequiredArgsConstructor
@@ -38,9 +41,10 @@ public class UserController {
         return "user/new";
     }
 
+
     @PostMapping(value = "/new")
     public String newUser(@Valid UserDto userDto, BindingResult bindingResult, Model model){
-
+        log.info("userDto{}{}{}", userDto.getEmail(), userDto.getPassword(), userDto.getName());
         if(bindingResult.hasErrors()){
             return "user/new";
         }
@@ -67,18 +71,36 @@ public class UserController {
         return "user/login";
     }
 
-    @GetMapping(value = "/main") // 지점명 검색하면 해당 지점 shop 인스턴스 보여줌
-    public String userShop(@RequestParam(value = "branch", required = false) String branch, Model model){
-        List<Shop> shopList = shopRepository.findByBranch(branch);
-        model.addAttribute("shopList", shopList);
-        return "user/newOrder";
+    @GetMapping(value = "/shop") // 지점명 검색하면 해당 지점 주문화면 보여줌
+    public String userShop(String branch, Model model){
+        Shop shop = shopRepository.findByBranch(branch);
+        ShopDto shopDto = new ShopDto();
+        shopDto.setBranch(shop.getBranch());
+        shopDto.setLocation(shop.getLocation());
+        shopDto.setPhone(shop.getPhone());
+        shopDto.setFriedQty(shop.getFriedQty());
+        shopDto.setSeasonedQty(shop.getSeasonedQty());
+        model.addAttribute("shopDto", shopDto);
+        return "user/shop";
     }
 
-    @GetMapping(value = "/orders") // user ID를 통해 볼 수 있는 주문목록
-    public String userOrder(@RequestParam(value = "email", required = false) String email, Model model){
-        User user = userRepository.findByEmail(email);
-        List<Order> orderList = orderRepository.findByUser(user);
-        model.addAttribute("orderList", orderList);
-        return "user/orders";
+    @PostMapping(value = "/order")
+    public String userShop(OrderDto orderDto, Model model){
+
+        Order order = Order.builder()
+                .fried(orderDto.getFried())
+                .seasoned(orderDto.getSeasoned())
+                .shop((Shop) model.getAttribute("shop")).build();
+        orderRepository.save(order);
+        return "main";
+    }
+
+    @GetMapping(value = "/orderList")
+    public String orderList(Principal principal, Model model){
+        String name = principal.getName();
+        User user = userRepository.findByName(name);
+        List<Order> order = orderRepository.findByUser(user);
+        model.addAttribute("orderList", order);
+        return "user/orderList";
     }
 }
