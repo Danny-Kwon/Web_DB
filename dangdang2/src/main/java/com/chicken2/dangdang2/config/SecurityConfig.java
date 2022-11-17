@@ -26,6 +26,8 @@ public class SecurityConfig {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                 .logoutSuccessUrl("/")
         ;
+//        http.cors().and();
+//        http.csrf().disable();
 
         //인증 실패시 라우팅
         http.exceptionHandling()

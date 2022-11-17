@@ -26,6 +26,9 @@
           <a class="nav-link" href="/seller/shops">상품 관리</a>
         </li>
         <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_CLIENT')"> <!--ROLE CLIENT인 경우 노출-->
+          <a class="nav-link" href="/user/order">주문 하기</a>
+        </li>
+        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_CLIENT')"> <!--ROLE CLIENT인 경우 노출-->
           <a class="nav-link" href="/user/orderList">주문 내역</a>
         </li>
         <li class="nav-item" sec:authorize="isAnonymous()"> <!--비인증 회원-->

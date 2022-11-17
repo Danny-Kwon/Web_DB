@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
-@Table(name = "order")
+@Table(name = "order_table")
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor

@@ -8,7 +8,9 @@ import com.chicken2.dangdang2.entity.User;
 import com.chicken2.dangdang2.repository.OrderRepository;
 import com.chicken2.dangdang2.repository.ShopRepository;
 import com.chicken2.dangdang2.repository.UserRepository;
+import com.chicken2.dangdang2.service.ShopService;
 import com.chicken2.dangdang2.service.UserService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,18 +21,19 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @Slf4j
 @RequestMapping("/seller")
 @Controller
 @RequiredArgsConstructor
+@Builder
 public class SellerController {
     private final UserService userService;
     private final OrderRepository orderRepository;
     private final ShopRepository shopRepository;
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ShopService shopService;
+    private final UserRepository userRepository;
 
     @GetMapping(value = "/new")
     public String newSeller(Model model){
@@ -48,7 +51,6 @@ public class SellerController {
         try {
             User user = User.createSeller(userDto, passwordEncoder);
             userService.saveUser(user);
-            model.addAttribute("currentUser", user);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "seller/new";
@@ -59,23 +61,29 @@ public class SellerController {
 
     @GetMapping("/shopForm")
     public String newShop(Model model){
-        model.addAttribute("shopDto", new ShopDto());
+        ShopDto shopDto = new ShopDto();
+        model.addAttribute("shopDto", shopDto);
+        System.out.println(shopDto);
         return "seller/shopForm";
     }
 
     @PostMapping("/shopForm")
-    public String newShop(ShopDto shopDto, Model model){
-        User user = (User) model.getAttribute("currentUser");
-        Shop build = Shop.builder()
-                .branch(shopDto.getBranch())
-                .phone(shopDto.getPhone())
-                .location(shopDto.getLocation())
-                .friedQty(shopDto.getFriedQty())
-                .seasonedQty(shopDto.getSeasonedQty())
-                .user(user)
-                .build();
-        shopRepository.save(build);
-        model.addAttribute("branch", shopDto.getBranch());
+    public String newShop(ShopDto shopDto, Principal principal, Model model){
+        User user = userRepository.findByName(principal.getName());
+        try {
+            Shop build = Shop.builder()
+                    .branch(shopDto.getBranch())
+                    .phone(shopDto.getPhone())
+                    .location(shopDto.getLocation())
+                    .friedQty(shopDto.getFriedQty())
+                    .seasonedQty(shopDto.getSeasonedQty())
+                    .user(user)
+                    .build();
+            shopService.saveShop(build);
+        } catch (IllegalStateException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            return "seller/shopForm";
+        }
         return "main";
     }
 
@@ -84,21 +92,10 @@ public class SellerController {
         return "/seller/shops";
     }
 
-//    @ResponseBody
-//    @GetMapping(value = "/newShop")
-//    public String newShop(Principal principal){
-//        log.info("{}", principal.getName());
-//        return "123";
-//
-//        User user = userRepository.findByEmail(email);
-//        List<Shop> shopList = shopRepository.findByUser(user);
-//        model.addAttribute("shopList", shopList);
-//        return "seller/shops";}
-
     @GetMapping(value = "/orders")
     public String shopOrders(@RequestParam(value = "branch", required = false)String branch, Model model){
         Shop shop = (Shop) shopRepository.findByBranch(branch);
-        List<Order> orderList = orderRepository.findByShop(shop);
+        Order order = orderRepository.findByShop(shop);
         return "seller/orders";
     }
 }

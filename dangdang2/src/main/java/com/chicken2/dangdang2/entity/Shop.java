@@ -1,6 +1,5 @@
 package com.chicken2.dangdang2.entity;
 
-import com.chicken2.dangdang2.dto.ShopDto;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -8,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "shop")
+@Table(name = "shop_table")
 @Getter
 @Setter
 @ToString
@@ -42,7 +41,7 @@ public class Shop implements Serializable {
     private Integer seasonedQty;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     @NotNull
+    @JoinColumn(name = "user_id")
     private User user;
 }

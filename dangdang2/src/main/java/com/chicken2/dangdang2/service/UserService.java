@@ -17,7 +17,8 @@ public class UserService implements UserDetailsService {
 
     public User saveUser(User user){
         validateDuplicateUser(user);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return user;
     }
 
     private void validateDuplicateUser(User user) {
