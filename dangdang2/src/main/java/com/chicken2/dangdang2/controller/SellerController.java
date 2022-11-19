@@ -92,7 +92,7 @@ public class SellerController {
     @GetMapping("/shops")
     public String modifyShopQty(Model model){
         model.addAttribute("productDto", new ProductDto());
-        return "/seller/shops";
+        return "seller/shops";
     }
 
     @PostMapping("/shops")
@@ -101,7 +101,7 @@ public class SellerController {
             shopService.modify(productDto.getBranch(), productDto.getMdfFried(), productDto.getMdfSeasoned());
         }catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
-            return "/seller/shops";
+            return "seller/shops";
         }
         return "main";
     }
