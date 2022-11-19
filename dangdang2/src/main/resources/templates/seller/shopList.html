@@ -109,25 +109,30 @@ a {
     <table>
         <thead>
         <tr>
-            <th>주문번호</th>
             <th>지점번호</th>
-            <th>판매자번호</th>
-            <th>후라이드 치킨</th>
-            <th>양념 치킨</th>
-            <th>주문 여부</th>
+            <th>지점명</th>
+            <th>관리자번호</th>
+            <th>위치</th>
+            <th>전화번호</th>
+            <th>후라이드 치킨 재고</th>
+            <th>양념 치킨 재고</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="orders : ${orderList}">
-            <td th:text="${orders.orderId}"></td>
-            <td th:text="${orders.orderShop}"></td>
-            <td th:text="${orders.orderUser}"></td>
-            <td th:text="${orders.fried}"></td>
-            <td th:text="${orders.seasoned}"></td>
-            <td th:text="${orders.extra}"></td>
+        <tr th:each="shops : ${shopList}">
+            <td th:text="${shops.shopId}"></td>
+            <td th:text="${shops.branch}"></td>
+            <td th:text="${shops.shopUsers}"></td>
+            <td th:text="${shops.location}"></td>
+            <td th:text="${shops.phone}"></td>
+            <td th:text="${shops.friedQty}"></td>
+            <td th:text="${shops.seasonedQty}"></td>
         </tr>
         </tbody>
     </table>
+    <button>
+        <a class="nav-link" href="/seller/shopForm">매장 추가</a>
+    </button>
 </div>
 </body>
 </html>

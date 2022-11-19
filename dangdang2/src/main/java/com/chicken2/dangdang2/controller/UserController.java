@@ -9,6 +9,7 @@ import com.chicken2.dangdang2.repository.OrderRepository;
 import com.chicken2.dangdang2.repository.ShopRepository;
 import com.chicken2.dangdang2.repository.UserRepository;
 import com.chicken2.dangdang2.service.OrderService;
+import com.chicken2.dangdang2.service.ShopService;
 import com.chicken2.dangdang2.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/user")
@@ -34,6 +36,7 @@ public class UserController {
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
     private final OrderService orderService;
+    private final ShopService shopService;
 
     @GetMapping(value = "/new")
     public String newUser(Model model){
@@ -47,7 +50,6 @@ public class UserController {
         if(bindingResult.hasErrors()){
             return "user/new";
         }
-
         try {
             User user = User.createUser(userDto, passwordEncoder);
             userService.saveUser(user);
@@ -84,10 +86,16 @@ public class UserController {
             Order order = Order.builder()
                     .fried(orderDto.getFried())
                     .seasoned(orderDto.getSeasoned())
-                    .extra(orderDto.getExtra())
-                    .shop(shop)
-                    .user(user)
+                    .extra("주문성공")
+                    .orderShop(shop.getShopId())
+                    .orderUser(user.getUserId())
+                    .receiveUser(shop.getShopUsers())
                     .build();
+            try {
+                shopService.modifyQty(shop, order);
+            } catch (NumberFormatException e){
+                model.addAttribute("errorMessage", e.getMessage());
+            }
             orderService.saveOrder(order);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
@@ -98,9 +106,9 @@ public class UserController {
     @GetMapping(value = "/orderList")
     public String orderList(Principal principal, Model model){
         String name = principal.getName();
-        User user = userRepository.findByName(name);
-        Order order = orderRepository.findByUser(user);
-        model.addAttribute("orderList", order);
+        Integer user = userRepository.findByName(name).getUserId();
+        List<Order> orderList = orderRepository.findByOrderUser(user);
+        model.addAttribute("orderList", orderList);
         return "user/orderList";
     }
 }

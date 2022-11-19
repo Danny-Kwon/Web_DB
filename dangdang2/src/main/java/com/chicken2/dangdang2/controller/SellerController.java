@@ -1,5 +1,6 @@
 package com.chicken2.dangdang2.controller;
 
+import com.chicken2.dangdang2.dto.ProductDto;
 import com.chicken2.dangdang2.dto.ShopDto;
 import com.chicken2.dangdang2.dto.UserDto;
 import com.chicken2.dangdang2.entity.Order;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/seller")
@@ -77,7 +79,7 @@ public class SellerController {
                     .location(shopDto.getLocation())
                     .friedQty(shopDto.getFriedQty())
                     .seasonedQty(shopDto.getSeasonedQty())
-                    .user(user)
+                    .shopUsers(user.getUserId())
                     .build();
             shopService.saveShop(build);
         } catch (IllegalStateException e){
@@ -88,14 +90,43 @@ public class SellerController {
     }
 
     @GetMapping("/shops")
-    public String index(Model model){
+    public String modifyShopQty(Model model){
+        model.addAttribute("productDto", new ProductDto());
         return "/seller/shops";
     }
 
-    @GetMapping(value = "/orders")
-    public String shopOrders(@RequestParam(value = "branch", required = false)String branch, Model model){
-        Shop shop = (Shop) shopRepository.findByBranch(branch);
-        Order order = orderRepository.findByShop(shop);
-        return "seller/orders";
+    @PostMapping("/shops")
+    public String modifyShopQty(ProductDto productDto, Model model){
+        try {
+            shopService.modify(productDto.getBranch(), productDto.getMdfFried(), productDto.getMdfSeasoned());
+        }catch (IllegalStateException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            return "/seller/shops";
+        }
+        return "main";
+    }
+
+    @GetMapping(value = "/orderList")
+    public String shopOrders(Principal principal, Model model){
+        Integer user = (userRepository.findByName(principal.getName())).getUserId();
+        List<Order> orderList = orderRepository.findByReceiveUser(user);
+        if(orderList != null){
+            model.addAttribute("orderList", orderList);
+            return "seller/orderList";
+        }else {
+            return "seller/shops";
+        }
+    }
+
+    @GetMapping(value = "/shopList")
+    public String shopLists(Principal principal, Model model){
+        Integer user = (userRepository.findByName(principal.getName())).getUserId();
+        List<Shop> shopList = shopRepository.findByShopUsers(user);
+        if (shopList != null){
+            model.addAttribute("shopList", shopList);
+            return "seller/shopList";
+        }else {
+            return "seller/shopForm";
+        }
     }
 }

@@ -20,15 +20,17 @@ public class Order implements Serializable {
     @Column(name = "order_id")
     private Integer orderId;
 
-    @ManyToOne
     @NotNull
-    @JoinColumn(name = "shop_id")
-    private Shop shop;
+    @Column(name = "orderShop")
+    private Integer orderShop;
 
-    @ManyToOne
     @NotNull
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "orderUser")
+    private Integer orderUser;
+
+    @NotNull
+    @Column(name = "receiveUser")
+    private Integer receiveUser;
 
     @NotNull
     @Column(name = "fried")

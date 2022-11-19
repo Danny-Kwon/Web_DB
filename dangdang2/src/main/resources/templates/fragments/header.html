@@ -17,7 +17,7 @@
           <a class="nav-link" href="/">홈</a>
         </li>
         <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')"> <!--ROLE SELLER인 경우 노출-->
-          <a class="nav-link" href="/seller/shopForm">매장 관리</a>
+          <a class="nav-link" href="/seller/shopList">매장 관리</a>
         </li>
         <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')"> <!--ROLE USER인 경우 노출-->
           <a class="nav-link" href="/seller/orderList">주문 내역</a>

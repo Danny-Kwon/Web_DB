@@ -21,8 +21,8 @@ public class OrderService {
     }
 
     private void validateExistShop(Order order) {
-        String branch = order.getShop().getBranch();
-        Shop findShop = shopRepository.findByBranch(branch);
+        Integer shopId = order.getOrderShop();
+        Shop findShop = shopRepository.findByShopId(shopId);
         if(findShop == null){
             throw new IllegalStateException("존재하지 않는 지점입니다.");
         }

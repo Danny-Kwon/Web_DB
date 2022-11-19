@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Builder
 public class Shop implements Serializable {
     @Id
-    @Column(name = "shop_id")
+    @Column(name = "shop_Id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer shopId;
 
@@ -40,8 +40,7 @@ public class Shop implements Serializable {
     @Column(name = "seasoned_qty")
     private Integer seasonedQty;
 
-    @ManyToOne
     @NotNull
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "shopUsers")
+    private Integer shopUsers;
 }
